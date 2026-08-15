@@ -225,7 +225,42 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 .camera-header {
   padding: 4px 6px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
+.camera-tools {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.orientation-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.82);
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+.camera-switch {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 50%;
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.camera-switch:active { transform: scale(.92); }
 .camera-header strong {
   display: block;
   margin-top: 4px;
@@ -250,7 +285,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .camera-frame {
   position: relative;
   width: min(100%, 560px);
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 30px;
   border: 2px solid rgba(255,255,255,.75);
@@ -542,6 +577,10 @@ button { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, input:focus-visible {
   outline: 3px solid rgba(255,255,255,.75);
   outline-offset: 3px;
+}
+
+@media (orientation: landscape) {
+  .camera-frame { aspect-ratio: 4 / 3; }
 }
 
 @media (min-width: 700px) {
