@@ -297,7 +297,6 @@ button { -webkit-tap-highlight-color: transparent; }
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scaleX(-1);
 }
 .camera-vignette {
   position: absolute;
