@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#78b1cf">
+  <meta name="description" content="#duNiaGede Photobooth — Gede & Nia, 19 August 2026, Tabanan, Bali">
+  <title>#duNiaGede Photobooth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <section class="screen active" data-screen="welcome" aria-labelledby="welcome-title">
+      <div class="hero-mark">#duNiaGede</div>
+      <div class="hero-copy">
+        <p class="eyebrow">19 · 08 · 2026</p>
+        <h1 id="welcome-title">Photobooth</h1>
+        <p>Capture a little moment from our big day.</p>
+      </div>
+      <button class="primary-btn" id="startBtn">Start Photobooth</button>
+      <p class="microcopy">Take 2 photos and keep the memory.</p>
+      <p class="signature">Gede &amp; Nia · Tabanan, Bali</p>
+    </section>
+
+    <section class="screen" data-screen="name" aria-labelledby="name-title">
+      <div class="section-top">
+        <span class="step-label">A LITTLE FIRST</span>
+        <span class="step-count">01 / 04</span>
+      </div>
+      <div class="center-card">
+        <p class="eyebrow">#duNiaGede</p>
+        <h2 id="name-title">First, tell us your name</h2>
+        <p class="body-copy">So we know who to thank for this little moment.</p>
+        <label class="field-label" for="guestName">Your name</label>
+        <input id="guestName" class="text-input" type="text" autocomplete="name" maxlength="80" placeholder="Enter your name">
+        <p class="field-error" id="nameError" role="alert"></p>
+        <button class="primary-btn" id="continueNameBtn">Continue <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section class="screen camera-screen" data-screen="camera" aria-labelledby="camera-title">
+      <div class="camera-header">
+        <div>
+          <span class="step-label" id="camera-title">READY?</span>
+          <strong id="photoCounter">PHOTO 1 / 2</strong>
+        </div>
+        <div class="dots" aria-label="Photo progress">
+          <span class="dot active" id="dot1"></span><span class="dot" id="dot2"></span>
+        </div>
+      </div>
+
+      <div class="camera-stage">
+        <div class="camera-frame" id="cameraFrame">
+          <video id="cameraVideo" autoplay playsinline muted aria-label="Live camera preview"></video>
+          <div class="camera-vignette"></div>
+          <div class="countdown" id="countdown" aria-live="assertive"></div>
+          <div class="shutter-flash" id="shutterFlash"></div>
+        </div>
+      </div>
+
+      <div class="camera-footer">
+        <p id="cameraInstruction">Get ready! 😊</p>
+        <button class="shutter" id="shutterBtn" aria-label="Take photo"><span></span></button>
+      </div>
+
+      <div class="camera-error" id="cameraError" role="alert" hidden>
+        <div class="error-icon">♡</div>
+        <h2>We need access to your camera to capture the moment 💙</h2>
+        <p>Please allow camera access in your browser settings, then try again.</p>
+        <button class="secondary-btn" id="cameraRetryBtn">Try Again</button>
+      </div>
+    </section>
+
+    <section class="screen preview-screen" data-screen="photoPreview" aria-labelledby="previewTitle">
+      <div class="section-top">
+        <span class="step-label" id="previewStep">PHOTO 1 / 2</span>
+        <span class="step-count">CHECK</span>
+      </div>
+      <div class="preview-card">
+        <p class="eyebrow">#duNiaGede</p>
+        <h2 id="previewTitle">Ready? Let's capture it.</h2>
+        <div class="captured-photo-wrap">
+          <img id="capturedPhoto" alt="Your captured photo">
+        </div>
+        <div class="button-row">
+          <button class="secondary-btn" id="retakePhotoBtn">Retake</button>
+          <button class="primary-btn" id="usePhotoBtn">Use Photo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen generating-screen" data-screen="generating" aria-labelledby="generatingTitle">
+      <div class="loader-orbit" aria-hidden="true"><span></span></div>
+      <p class="eyebrow">#duNiaGede</p>
+      <h2 id="generatingTitle">Putting the moment together…</h2>
+      <p>Just a little magic before you see it.</p>
+    </section>
+
+    <section class="screen final-screen" data-screen="final" aria-labelledby="finalTitle">
+      <div class="final-heading">
+        <p class="eyebrow">#duNiaGede</p>
+        <h2 id="finalTitle">Your memory is ready ✨</h2>
+        <p>A little piece of #duNiaGede, just for you.</p>
+      </div>
+
+      <div class="final-strip-wrap">
+        <img id="finalStrip" alt="Final Gede and Nia wedding photo strip">
+      </div>
+
+      <div class="save-status" id="saveStatus" aria-live="polite">
+        <span class="status-dot"></span>
+        <span id="saveStatusText">Saving your memory…</span>
+      </div>
+
+      <div class="cta-grid">
+        <button class="secondary-btn" id="finalRetakeBtn">↻ Retake</button>
+        <button class="primary-btn" id="downloadBtn">↓ Download</button>
+        <button class="primary-btn share-btn" id="shareBtn">↗ Share</button>
+        <button class="secondary-btn retry-upload-btn" id="retryUploadBtn" hidden>Try Saving Again</button>
+      </div>
+
+      <div class="final-note">
+        <p>I hope this little moment reminds you of our big day.</p>
+        <strong>Gede &amp; Nia</strong>
+        <span>19 August 2026 · Tabanan, Bali</span>
+      </div>
+    </section>
+
+    <div class="modal-backdrop" id="retakeModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="retakeTitle">
+        <p class="eyebrow">ONE MORE TRY?</p>
+        <h2 id="retakeTitle">Retake both photos?</h2>
+        <p>Your current photos will be replaced, but you can keep the finished download if you already saved it.</p>
+        <div class="button-row">
+          <button class="secondary-btn" id="cancelRetakeBtn">Keep This</button>
+          <button class="primary-btn" id="confirmRetakeBtn">Retake</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <canvas id="compositionCanvas" hidden></canvas>
+  <iframe name="uploadSink" id="uploadSink" class="upload-sink" title="Upload target"></iframe>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
