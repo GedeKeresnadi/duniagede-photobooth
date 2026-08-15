@@ -7,7 +7,7 @@ const CONFIG = {
 
   // Paste the deployed Google Apps Script /exec URL here.
   // Leave blank only while doing a local UI/camera test.
-  backendUrl: "https://script.google.com/macros/s/AKfycbyAl_1Nd-KYo-y4B3IRd3C-KDOtru0lqv-_x5SeG2wDwxWt-4sN8h7besUtL_myWskr5A/exec",
+  backendUrl: "",
 
   photoCount: 2,
   filenamePrefix: "DU-NIA-GEDE",
