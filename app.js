@@ -185,6 +185,9 @@
 
       const video = $("cameraVideo");
       video.srcObject = state.stream;
+      // Keep the live preview natural for both front and rear cameras.
+      // Do not mirror either feed; this matches a conventional camera-app view.
+      video.classList.remove("mirror");
       await video.play();
       updateCameraOrientation();
       setPhotoProgress(state.currentPhoto);
@@ -230,9 +233,9 @@
     canvas.height = h;
     const ctx = canvas.getContext("2d", { alpha: false });
 
-    // Mirror the captured image because the live front-camera preview is mirrored.
-    ctx.translate(w, 0);
-    ctx.scale(-1, 1);
+    // Draw the camera frame exactly as delivered by the browser.
+    // Neither front nor rear camera is mirrored. The browser handles
+    // camera orientation; we only crop to the current UI aspect ratio.
     ctx.drawImage(video, sx, sy, sw, sh, 0, 0, w, h);
 
     return canvas.toDataURL("image/jpeg", CONFIG.jpegQuality);
