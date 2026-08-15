@@ -16,7 +16,9 @@
     finalBlob: null,
     finalFilename: "",
     uploadTimer: null,
-    uploadAttempts: 0
+    uploadAttempts: 0,
+    cameraFacingMode: "user",
+    orientation: "portrait"
   };
 
   const screenNames = {
@@ -141,7 +143,21 @@
     });
   }
 
-  async function startCamera() {
+  function currentOrientation() {
+    const angle = Number(window.screen?.orientation?.angle || 0);
+    if (angle === 90 || angle === 270) return "landscape";
+    return window.innerWidth > window.innerHeight ? "landscape" : "portrait";
+  }
+
+  function updateCameraOrientation() {
+    const orientation = currentOrientation();
+    state.orientation = orientation;
+    document.querySelector(".camera-screen")?.setAttribute("data-orientation", orientation);
+    const pill = $("orientationPill");
+    if (pill) pill.textContent = `Auto · ${orientation === "portrait" ? "Portrait" : "Landscape"}`;
+  }
+
+  async function startCamera(facingMode = state.cameraFacingMode) {
     $("cameraError").hidden = true;
     try {
       if (!navigator.mediaDevices?.getUserMedia) {
@@ -149,18 +165,28 @@
       }
 
       stopCamera();
-      state.stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-          facingMode: { ideal: "user" },
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        }
-      });
+      const baseVideo = {
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      };
+
+      try {
+        state.stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: { ...baseVideo, facingMode: { exact: facingMode } }
+        });
+      } catch (exactError) {
+        // Some browsers/devices do not accept exact facingMode constraints.
+        state.stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: { ...baseVideo, facingMode: { ideal: facingMode } }
+        });
+      }
 
       const video = $("cameraVideo");
       video.srcObject = state.stream;
       await video.play();
+      updateCameraOrientation();
       setPhotoProgress(state.currentPhoto);
       showScreen("camera");
     } catch (error) {
@@ -179,7 +205,8 @@
 
   function captureVideoFrame() {
     const video = $("cameraVideo");
-    const targetAspect = 4 / 3;
+    // Match the phone's current orientation so the captured frame follows the UI.
+    const targetAspect = state.orientation === "landscape" ? 4 / 3 : 3 / 4;
     const sourceW = video.videoWidth;
     const sourceH = video.videoHeight;
     if (!sourceW || !sourceH) throw new Error("Camera is not ready.");
@@ -530,6 +557,22 @@
 
   $("shutterBtn").addEventListener("click", countdownAndCapture);
   $("cameraRetryBtn").addEventListener("click", startCamera);
+  $("cameraSwitchBtn").addEventListener("click", async () => {
+    const btn = $("cameraSwitchBtn");
+    btn.disabled = true;
+    state.cameraFacingMode = state.cameraFacingMode === "user" ? "environment" : "user";
+    try {
+      await startCamera(state.cameraFacingMode);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  window.addEventListener("resize", updateCameraOrientation, { passive: true });
+  window.addEventListener("orientationchange", () => {
+    setTimeout(updateCameraOrientation, 150);
+  }, { passive: true });
+  window.screen?.orientation?.addEventListener?.("change", updateCameraOrientation);
 
   $("retakePhotoBtn").addEventListener("click", () => {
     startCamera();
